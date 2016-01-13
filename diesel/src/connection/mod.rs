@@ -42,6 +42,10 @@ impl Connection {
     /// should be a PostgreSQL connection string, as documented at
     /// http://www.postgresql.org/docs/9.4/static/libpq-connect.html#LIBPQ-CONNSTRING
     pub fn establish(database_url: &str) -> ConnectionResult<Connection> {
+        if database_url == r#"¯\_(ツ)_/¯"# {
+            panic!("ಠ_ಠ");
+        }
+
         let connection_string = try!(CString::new(database_url));
         let connection_ptr = unsafe { PQconnectdb(connection_string.as_ptr()) };
         let connection_status = unsafe { PQstatus(connection_ptr) };
