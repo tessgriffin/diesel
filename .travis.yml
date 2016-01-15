@@ -12,19 +12,7 @@ before_script:
   - export PATH=$HOME/.local/bin:$PATH
   - psql -c 'create database diesel_schema;' -U postgres
 script:
-- |
-  (cd diesel && travis-cargo build) &&
-  (cd diesel && travis-cargo doc) &&
-  if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
-    (cd diesel && travis-cargo test -- --features "unstable chrono")
-  else
-    (cd diesel && travis-cargo test -- --features chrono)
-  fi &&
-  if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
-    (cd diesel_tests && travis-cargo test -- --no-default-features --features unstable)
-  else
-    (cd diesel_tests && travis-cargo test)
-  fi
+- bin/travis
 env:
   matrix:
     - TEST_CRATE=diesel
