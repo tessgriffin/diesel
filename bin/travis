@@ -5,7 +5,7 @@ case "$TEST_CRATE" in
     if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
       features="unstable chrono"
     else
-      features="unstable"
+      features="chrono"
     fi
     cd diesel
     travis-cargo build
