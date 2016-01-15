@@ -1,0 +1,32 @@
+#!/bin/sh
+set -e
+case "$TEST_CRATE" in
+  "diesel")
+    if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
+      features="unstable chrono"
+    else
+      features="unstable"
+    fi
+    cd diesel
+    travis-cargo build
+    travis-cargo doc
+    travis-cargo test -- --features $features
+  ;;
+  "diesel_cli") cd diesel_cli && travis-cargo test
+  ;;
+  "diesel_codegen")
+    if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
+      cd diesel_codegen && travis-cargo test -- --no-default-features --features nightly
+    else
+      cd diesel_codegen && travis-cargo test
+    fi
+  ;;
+  "diesel_tests")
+    if [[ "$TRAVIS_RUST_VERSION" == nightly* ]]; then
+      (cd diesel_tests && travis-cargo test -- --no-default-features --features unstable)
+    else
+      (cd diesel_tests && travis-cargo test)
+    fi
+  ;;
+  *) echo "Unknown test crate"; exit 1
+esac
